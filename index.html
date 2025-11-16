@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>ゆっくりーむサーバールール</title>
+
+<!-- favicon -->
+<link rel="icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDiixCxFxSfrAxb1LLmG78-Ttpy4hU4MmQHw&s" type="image/png">
+
+<style>
+    body {
+        font-family: "Segoe UI", "Noto Sans JP", sans-serif;
+        padding: 20px;
+        line-height: 1.75;
+        transition: background 0.3s, color 0.3s;
+    }
+
+    /* ライトモード */
+    body {
+        background: #f4f6f8;
+        color: #333;
+    }
+    .container {
+        background: #fff;
+        box-shadow: 0 0 12px rgba(0,0,0,0.1);
+    }
+
+    /* ダークモード */
+    @media (prefers-color-scheme: dark) {
+        body {
+            background: #121212;
+            color: #e5e5e5;
+        }
+        .container {
+            background: #1e1e1e;
+            box-shadow: 0 0 12px rgba(255,255,255,0.05);
+        }
+        input[type="text"] {
+            background: #2b2b2b;
+            color: #fff;
+            border: 1px solid #555;
+        }
+        pre {
+            background: #2b2b2b;
+        }
+    }
+
+    .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 25px;
+        border-radius: 12px;
+    }
+
+    h1, h2, h3 {
+        margin-top: 30px;
+    }
+
+    .search-box {
+        margin: 20px 0;
+        display: flex;
+        gap: 10px;
+    }
+
+    input[type="text"] {
+        flex: 1;
+        padding: 10px 14px;
+        border-radius: 6px;
+        border: 1px solid #aaa;
+        font-size: 15px;
+    }
+
+    button {
+        padding: 10px 15px;
+        background: #4c8cff;
+        border: none;
+        border-radius: 6px;
+        color: white;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    button:hover {
+        background: #3b74d4;
+    }
+
+    pre {
+        padding: 10px;
+        border-radius: 6px;
+        overflow-x: auto;
+        background: #eee;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .header-info {
+        font-size: 14px;
+        margin-bottom: 15px;
+        opacity: 0.8;
+    }
+
+    mark {
+        background: yellow;
+        padding: 0 3px;
+    }
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<div class="header-info">
+    <span id="updated">最終更新日: 2025/11/16</span><br>
+    <span id="clock">現在時刻: --:--:--</span>
+</div>
+
+<h1>参加者向けルール</h1>
+
+<!-- 参加者用検索 -->
+<div class="search-box">
+    <input type="text" id="searchInput1" placeholder="ルールを検索…">
+    <button onclick="searchRules('rules', 'searchInput1')">検索</button>
+</div>
+
+<div id="rules">
+
+<h2>やっていいこと</h2>
+<ul>
+    <li>普通に雑談・交流・相談してOK</li>
+    <li>VCは他の人に迷惑をかけなければOK</li>
+    <li>困った時はいつでも運営に相談OK</li>
+</ul>
+
+<h2>やってはいけないこと</h2>
+<ul>
+    <li>他人を傷つける、バカにする</li>
+    <li>荒らし行為（連投・スパム・過度なメンション）</li>
+    <li>R18/暴力系など不適切な内容</li>
+    <li>無断の宣伝DM</li>
+    <li>勧誘・引き抜き行為</li>
+    <li>個人情報の公開</li>
+    <li>サーバーの空気を乱す行動</li>
+    <li>下記のNGサーバーに関係する行動</li>
+</ul>
+
+<pre>
+OZEU / AARR / 違法SHOP / NSFW（雑談での利用）
+</pre>
+
+<h2>処罰について</h2>
+<ul>
+    <li>注意</li>
+    <li>一時的なミュート</li>
+    <li>一部チャンネルの制限（制限モード）</li>
+    <li>重度の場合はサーバー退出</li>
+</ul>
+<p>※ 判断は複数運営が確認して行います。</p>
+
+<h2>公平性について</h2>
+<ul>
+    <li>証拠が不十分な場合は処罰しません</li>
+    <li>誤解の可能性がある場合は利用者有利</li>
+    <li>個人の好き嫌いで処罰はしません</li>
+</ul>
+
+<h2>異議申し立て</h2>
+<p>処罰に納得できない場合、運営に申し立てれば “裁判” として話し合いできます。</p>
+
+</div>
+
+<hr>
+
+<!-- ▼ 運営ガイドを開く -->
+<button onclick="toggleGuide()">▼ 処罰基準（運営向けガイド）を表示</button>
+
+<div id="guide" class="hidden">
+
+<h1>処罰基準（運営用）</h1>
+
+<!-- 運営用検索 -->
+<div class="search-box">
+    <input type="text" id="searchInput2" placeholder="処罰基準を検索…">
+    <button onclick="searchRules('guide', 'searchInput2')">検索</button>
+</div>
+
+<h2>■ 違反点数一覧</h2>
+
+<h3>軽度（0〜1点）</h3>
+<ul>
+    <li>小規模なマナー違反</li>
+    <li>不適切発言（悪意が薄い）</li>
+    <li>VCでの迷惑行為（軽度）</li>
+    <li>軽いルール無視</li>
+</ul>
+<p>→ 累計<strong>3点</strong>で Level1（制限モードⅠ）</p>
+
+<h3>中度（3点）</h3>
+<ul>
+    <li>明確な暴言</li>
+    <li>執拗な迷惑行為</li>
+    <li>無断宣伝</li>
+    <li>運営指示の無視</li>
+    <li>挑発・議論妨害</li>
+</ul>
+<p>→ 累計<strong>5点</strong>で Level2（制限モードⅡ）</p>
+
+<h3>重度（5点）</h3>
+<ul>
+    <li>プライバシー侵害</li>
+    <li>大規模荒らし</li>
+    <li>DMでの嫌がらせ</li>
+    <li>悪質な勧誘</li>
+    <li>混乱を招く情報持ち込み</li>
+</ul>
+<p>→ 累計<strong>8点</strong>で Level3（制限モードⅢ）</p>
+
+<h3>最重度（10点）</h3>
+<ul>
+    <li>深刻な誹謗中傷</li>
+    <li>ハッキング・情報持ち出し</li>
+    <li>サーバー破壊を目的とした行動</li>
+    <li>生命・差別に関わる重大発言</li>
+</ul>
+<p>→ 累計<strong>10点</strong>で BAN 審議</p>
+
+<h2>■ 点数の処理</h2>
+<ul>
+    <li>点数は運営2名以上の承認（緊急時は1名可）</li>
+    <li>点数は一定期間で減点（例：1ヶ月に −1）</li>
+    <li>管理者の判断で恩赦（点数リセット）可能</li>
+</ul>
+
+<h2>■ 「疑わしきは罰せず」</h2>
+<ul>
+    <li>証拠不足 → 点数を付与しない</li>
+    <li>解釈が複数ある場合 → 利用者有利で判断</li>
+    <li>推測だけでの処罰は禁止</li>
+</ul>
+
+</div>
+
+</div>
+
+<script>
+// 開閉
+function toggleGuide() {
+    const box = document.getElementById("guide");
+    box.classList.toggle("hidden");
+}
+
+// 検索機能（参加者 & 運営用共通）
+function searchRules(targetId, inputId) {
+    const keyword = document.getElementById(inputId).value.trim();
+    const target = document.getElementById(targetId);
+
+    target.innerHTML = target.innerHTML.replace(/<mark>|<\/mark>/g, "");
+
+    if (!keyword) return;
+
+    const reg = new RegExp(keyword, "gi");
+    target.innerHTML = target.innerHTML.replace(reg, m => `<mark>${m}</mark>`);
+}
+
+// 時計リアルタイム表示
+function updateClock() {
+    const now = new Date();
+    const t = now.toLocaleString("ja-JP", { hour12: false });
+    document.getElementById("clock").textContent = "現在時刻: " + t;
+}
+setInterval(updateClock, 1000);
+updateClock();
+</script>
+
+</body>
+</html>
